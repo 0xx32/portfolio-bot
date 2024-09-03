@@ -4,24 +4,50 @@ import { createInlineKeyboard, createKeyboard } from './utils/createKeyboard'
 import { startMenuKeyboard } from './utils/buttons'
 import { log } from 'console'
 import { startMessageHtml } from './utils/messages'
+import { prisma } from './db/prisma'
 
 const bot = new Bot(process.env.BOT_TOKEN!)
 
-bot.command('start', (ctx) => {
-	ctx.reply('Welcome! Up and running.', {})
+bot.command('start', async (ctx) => {
+	const user = await prisma.user.findUnique({
+		where: {
+			id: ctx.from?.id,
+		},
+	})
+	console.log(user)
 
-	// ctx.api.sendPhoto(
-	// 	ctx.chat.id,
-	// 	'https://yandex.ru/images/search?text=картинки&img_url=https%3A%2F%2Fwww.tapeciarnia.pl%2Ftapety%2Fnormalne%2F253304_gory_jezioro_swierki_swiatlo_cien_odbicie.jpg&pos=0&rpt=simage&stype=image&lr=35&parent-reqid=1725385284026539-7643823848158709892-balancer-l7leveler-kubr-yp-klg-242-BAL&source=serp'
-	// )
-})
+	console.log(ctx.from?.id)
 
-bot.on('message', async (ctx) => {
-	await ctx.replyWithPhoto(new InputFile('./public/images/' + 'image.png'), {
+	if (!user && ctx.from?.id) {
+		console.log(ctx.from?.id)
+
+		await prisma.user.create({
+			data: {
+				accountId: ctx.from?.id,
+			},
+		})
+	}
+
+	const phote = new InputFile('./public/images/' + 'image.png')
+	const message = await ctx.replyWithPhoto(phote, {
 		caption: startMessageHtml,
 		parse_mode: 'HTML',
 		reply_markup: createInlineKeyboard(startMenuKeyboard),
 	})
+
+	console.log(message.photo[3].file_id)
 })
 
-bot.start()
+async function main() {
+	bot.start()
+}
+
+main()
+	.then(async () => {
+		await prisma.$disconnect()
+	})
+	.catch(async (e) => {
+		console.error(e)
+		await prisma.$disconnect()
+		process.exit(1)
+	})
