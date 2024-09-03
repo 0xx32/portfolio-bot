@@ -1,0 +1,28 @@
+{
+  "name": "portfolio-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "prepare": "husky",
+    "format": "prettier --write ."
+  },
+  "keywords": [],
+  "author": "access",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^9.1.5",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "grammy": "^1.29.0"
+  },
+  "lint-staged": {
+    "*.ts": "prettier --write"
+  }
+}
