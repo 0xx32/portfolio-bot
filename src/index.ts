@@ -1,53 +1,46 @@
-import { Bot, InputFile } from 'grammy'
+import { Bot, session } from 'grammy'
+import { hydrate } from '@grammyjs/hydrate'
+import { conversations, createConversation } from '@grammyjs/conversations'
 import 'dotenv/config'
-import { createInlineKeyboard, createKeyboard } from './utils/createKeyboard'
-import { startMenuKeyboard } from './utils/buttons'
-import { log } from 'console'
-import { startMessageHtml } from './utils/messages'
+
 import { prisma } from './db/prisma'
+import { adminHanlder, startHandler } from './handlers/commands'
+import { backHandler } from './handlers/actions'
+import { addProject } from './conservations/addProject'
+import type { MyContext } from './@types/bot'
+import { isAdmin } from './helpers'
 
-const bot = new Bot(process.env.BOT_TOKEN!)
+const bot = new Bot<MyContext>(process.env.BOT_TOKEN!)
 
-bot.command('start', async (ctx) => {
-	const user = await prisma.user.findUnique({
-		where: {
-			id: ctx.from?.id,
-		},
-	})
-	console.log(user)
+//middlewares
+bot.use(hydrate())
+bot.use(session({ initial: () => ({}) }))
+bot.use(conversations())
+bot.use(createConversation(addProject))
 
-	console.log(ctx.from?.id)
+//comand handlers
+bot.command('start', startHandler)
+bot.command('admin', adminHanlder)
+bot.hears('Назад ↩️', backHandler)
 
-	if (!user && ctx.from?.id) {
-		console.log(ctx.from?.id)
+bot.on('message', async (ctx) => {})
 
-		await prisma.user.create({
-			data: {
-				accountId: ctx.from?.id,
-			},
-		})
-	}
+//callback query handlers
+bot.callbackQuery('add-project', async (ctx) => {
+	if (!isAdmin(ctx.from.id)) return
 
-	const phote = new InputFile('./public/images/' + 'image.png')
-	const message = await ctx.replyWithPhoto(phote, {
-		caption: startMessageHtml,
-		parse_mode: 'HTML',
-		reply_markup: createInlineKeyboard(startMenuKeyboard),
-	})
-
-	console.log(message.photo[3].file_id)
+	await ctx.conversation.enter('addProject')
 })
 
 async function main() {
-	bot.start()
+	try {
+		bot.start()
+		await prisma.$disconnect()
+	} catch (error) {
+		console.error(error)
+		await prisma.$disconnect()
+		process.exit(1)
+	}
 }
 
 main()
-	.then(async () => {
-		await prisma.$disconnect()
-	})
-	.catch(async (e) => {
-		console.error(e)
-		await prisma.$disconnect()
-		process.exit(1)
-	})

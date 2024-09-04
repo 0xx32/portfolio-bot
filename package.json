@@ -1,33 +1,36 @@
 {
-  "name": "portfolio-bot",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "dev": "tsx watch  src/index.ts",
-    "prepare": "husky",
-    "format": "prettier --write ."
-  },
-  "keywords": [],
-  "author": "access",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/node": "^22.5.2",
-    "husky": "^9.1.5",
-    "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3",
-    "prisma": "^5.19.1",
-    "ts-node": "^10.9.2",
-    "tsx": "^4.19.0",
-    "typescript": "^5.5.4"
-  },
-  "dependencies": {
-    "@prisma/client": "5.19.1",
-    "dotenv": "^16.4.5",
-    "grammy": "^1.29.0"
-  },
-  "lint-staged": {
-    "*.ts": "prettier --write"
-  }
+	"name": "portfolio-bot",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"dev": "tsx watch src/index.ts",
+		"prepare": "husky",
+		"format": "prettier --write ."
+	},
+	"keywords": [],
+	"author": "access",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/node": "^22.5.2",
+		"husky": "^9.1.5",
+		"lint-staged": "^15.2.10",
+		"prettier": "^3.3.3",
+		"prisma": "^5.19.1",
+		"ts-node": "^10.9.2",
+		"tsx": "^4.19.0",
+		"typescript": "^5.5.4"
+	},
+	"dependencies": {
+		"@grammyjs/conversations": "^1.2.0",
+		"@grammyjs/hydrate": "^1.4.1",
+		"@prisma/client": "5.19.1",
+		"dotenv": "^16.4.5",
+		"grammy": "^1.29.0",
+		"nodejs-file-downloader": "^4.13.0"
+	},
+	"lint-staged": {
+		"*.ts": "prettier --write"
+	}
 }

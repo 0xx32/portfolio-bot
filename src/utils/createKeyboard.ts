@@ -1,15 +1,14 @@
 import { InlineKeyboard, Keyboard } from 'grammy'
 
-interface Button {
+interface CustomButton {
 	label: string
-	data: string
 	url?: string
 }
 
 interface KeyboardOptions {
 	isBack?: boolean
 }
-export const createKeyboard = (buttons: Button[], options: KeyboardOptions) => {
+export const createKeyboard = (buttons: CustomButton[], options: KeyboardOptions = {}) => {
 	const keyboard = new Keyboard()
 	const buttonCount = buttons.length
 	const buttonsPerColumn = Math.ceil(buttonCount / 2)
@@ -31,10 +30,27 @@ export const createKeyboard = (buttons: Button[], options: KeyboardOptions) => {
 	return keyboard
 }
 
-export const createInlineKeyboard = (buttons: Button[]) => {
+interface InlineButton {
+	label: string
+	data: string
+	url?: string
+}
+
+interface InlineKeyboardOptions {
+	numberButtonsInRow: number
+}
+
+export const createInlineKeyboard = (
+	buttons: InlineButton[],
+	options: InlineKeyboardOptions = {
+		numberButtonsInRow: 1,
+	}
+) => {
 	const keyboard = new InlineKeyboard()
 
-	buttons.forEach((button) => {
+	buttons.forEach((button, index) => {
+		if (index % options.numberButtonsInRow === 0 && index !== 0) keyboard.row()
+
 		if (button.url) return keyboard.url(button.label, button.url)
 
 		keyboard.text(button.label, button.data)

@@ -8,6 +8,19 @@ datasource db {
 }
 
 model User {
-  id        Int @id @default(autoincrement())
-  accountId BigInt
+  id        Int    @id @default(autoincrement())
+  accountId BigInt @unique
+}
+
+model StaticFiles {
+  id     Int    @id @default(autoincrement())
+  fileId String
+  path   String @unique
+}
+
+model Projects {
+  id          Int    @id @default(autoincrement())
+  title       String
+  imagePath   String
+  description String?
 }

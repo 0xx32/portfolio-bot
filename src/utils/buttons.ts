@@ -9,3 +9,13 @@ export const startMenuKeyboard = [
 		data: 'portfolio',
 	},
 ]
+export const adminMenuKeyboard = [
+	{
+		label: 'Добавить проект',
+		data: 'add-project',
+	},
+	{
+		label: 'Поменять контакты',
+		data: 'change-contact',
+	},
+]
