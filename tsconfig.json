@@ -26,9 +26,10 @@
 			"@/*": ["./src/*"],
 			"@utils/*": ["./src/utils/*"],
 			"@handlers/*": ["./src/handlers/*"],
-			"@types/*": ["./src/@types/*"],
+			"@types/*": ["src/types/*"],
 			"@public/*": ["./public/*"],
-			"@helpers/*": ["./src/helpers/*"]
+			"@helpers/*": ["./src/helpers/*"],
+			"@/settings": ["./setting.json"]
 		}
 	},
 	"exclude": ["node_modules", "dist"]

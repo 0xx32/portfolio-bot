@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Contacts {
+  id    Int    @id @default(autoincrement())
+  slug  String @unique
+  value String
+  title String
+}
+
 model User {
   id        Int    @id @default(autoincrement())
   accountId BigInt @unique
@@ -19,7 +26,7 @@ model StaticFiles {
 }
 
 model Projects {
-  id          Int    @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   title       String
   imagePath   String
   description String?

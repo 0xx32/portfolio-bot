@@ -1,7 +1,7 @@
 import { Context, InputFile } from 'grammy'
 
 import { startMessageHtml, createInlineKeyboard, startMenuKeyboard } from '@/utils'
-import { prisma } from '@/db/prisma'
+import { prisma } from '@/utils/db/prisma'
 
 export const startHandler = async (ctx: Context) => {
 	const user = await prisma.user.findUnique({

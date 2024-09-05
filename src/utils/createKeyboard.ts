@@ -1,3 +1,4 @@
+import type { InlineButton } from '@/types/bot'
 import { InlineKeyboard, Keyboard } from 'grammy'
 
 interface CustomButton {
@@ -17,9 +18,11 @@ export const createKeyboard = (buttons: CustomButton[], options: KeyboardOptions
 		const firstButtonIndex = i
 		const secondButtonIndex = i + buttonsPerColumn
 
+		if (!buttons[firstButtonIndex]) break
+
 		keyboard.text(buttons[firstButtonIndex].label)
 
-		if (secondButtonIndex < buttonCount) {
+		if (secondButtonIndex < buttonCount && buttons[secondButtonIndex]) {
 			keyboard.text(buttons[secondButtonIndex].label)
 		}
 
@@ -28,12 +31,6 @@ export const createKeyboard = (buttons: CustomButton[], options: KeyboardOptions
 	if (options.isBack) keyboard.text('Назад ↩️')
 
 	return keyboard
-}
-
-interface InlineButton {
-	label: string
-	data: string
-	url?: string
 }
 
 interface InlineKeyboardOptions {

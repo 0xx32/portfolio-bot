@@ -1,8 +1,10 @@
+import settings from '../../setting.json'
+
 export const startMenuKeyboard = [
 	{
 		label: 'Связаться',
 		data: 'contact',
-		url: 'https://t.me/ahhiweb',
+		url: settings.telegram,
 	},
 	{
 		label: 'Портфолио',

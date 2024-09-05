@@ -1,36 +1,30 @@
-import { Bot, session } from 'grammy'
+import { Bot, GrammyError, HttpError, session } from 'grammy'
 import { hydrate } from '@grammyjs/hydrate'
 import { conversations, createConversation } from '@grammyjs/conversations'
 import 'dotenv/config'
 
-import { prisma } from './db/prisma'
+import type { MyContext } from './types/bot'
+import { initialSession } from './core/session'
+import { prisma } from './utils/db/prisma'
+
+import { addProject, changeContact, admin } from './handlers/conservations'
 import { adminHanlder, startHandler } from './handlers/commands'
-import { backHandler } from './handlers/actions'
-import { addProject } from './conservations/addProject'
-import type { MyContext } from './@types/bot'
-import { isAdmin } from './helpers'
+import { portfolioCallback } from './handlers/callbacks'
 
 const bot = new Bot<MyContext>(process.env.BOT_TOKEN!)
 
 //middlewares
-bot.use(hydrate())
-bot.use(session({ initial: () => ({}) }))
+bot.use(session({ initial: initialSession }))
 bot.use(conversations())
-bot.use(createConversation(addProject))
+bot.use(hydrate())
+bot.use(createConversation(addProject), createConversation(changeContact), createConversation(admin))
 
-//comand handlers
+//Commands
 bot.command('start', startHandler)
 bot.command('admin', adminHanlder)
-bot.hears('Назад ↩️', backHandler)
 
-bot.on('message', async (ctx) => {})
-
-//callback query handlers
-bot.callbackQuery('add-project', async (ctx) => {
-	if (!isAdmin(ctx.from.id)) return
-
-	await ctx.conversation.enter('addProject')
-})
+//Callbacks
+bot.callbackQuery('portfolio', portfolioCallback)
 
 async function main() {
 	try {
@@ -44,3 +38,16 @@ async function main() {
 }
 
 main()
+
+bot.catch((err) => {
+	const ctx = err.ctx
+	console.error(`Error while handling update ${ctx.update.update_id}:`)
+	const e = err.error
+	if (e instanceof GrammyError) {
+		console.error('Error in request:', e.description)
+	} else if (e instanceof HttpError) {
+		console.error('Could not contact Telegram:', e)
+	} else {
+		console.error('Unknown error:', e)
+	}
+})
