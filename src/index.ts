@@ -6,10 +6,7 @@ import 'dotenv/config'
 import type { MyContext } from './types/bot'
 import { initialSession } from './core/session'
 import { prisma } from './utils/db/prisma'
-
-import { addProject, changeContact, admin } from './handlers/conservations'
-import { adminHanlder, startHandler } from './handlers/commands'
-import { portfolioCallback } from './handlers/callbacks'
+import { adminComposer, commandComposer, conversationsComposer, mainComposer } from './controllers'
 
 const bot = new Bot<MyContext>(process.env.BOT_TOKEN!)
 
@@ -17,14 +14,12 @@ const bot = new Bot<MyContext>(process.env.BOT_TOKEN!)
 bot.use(session({ initial: initialSession }))
 bot.use(conversations())
 bot.use(hydrate())
-bot.use(createConversation(addProject), createConversation(changeContact), createConversation(admin))
+bot.use(conversationsComposer)
 
-//Commands
-bot.command('start', startHandler)
-bot.command('admin', adminHanlder)
-
-//Callbacks
-bot.callbackQuery('portfolio', portfolioCallback)
+//controllers
+bot.use(commandComposer)
+bot.use(mainComposer)
+bot.use(adminComposer)
 
 async function main() {
 	try {

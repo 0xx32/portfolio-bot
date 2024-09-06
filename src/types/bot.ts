@@ -1,4 +1,4 @@
-import type { Context, SessionFlavor } from 'grammy'
+import type { Context, MiddlewareObj, NextFunction, SessionFlavor } from 'grammy'
 import type { Conversation, ConversationFlavor } from '@grammyjs/conversations'
 import type { HydrateFlavor } from '@grammyjs/hydrate'
 
@@ -12,3 +12,8 @@ export interface InlineButton {
 	data: string
 	url?: string
 }
+
+export type Middleware = MiddlewareFn | MiddlewareObj
+// Omitted type parameters again.
+export type MiddlewareFn = (ctx: Context, next: NextFunction) => Promise<unknown>
+// with

@@ -15,4 +15,6 @@ export const portfolioCallback = async (ctx: MyContext) => {
 				reply_markup: new InlineKeyboard().url('Подробнее', 'https://grammy.dev/'),
 			})
 		})
+
+	await ctx.reply('')
 }

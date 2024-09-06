@@ -11,11 +11,14 @@ export const changeContact = async (conversation: MyConversation, ctx: MyContext
 	await ctx.editMessageText('Какое поле вы хотите поменять?', {
 		reply_markup: createInlineKeyboard([
 			{ label: 'Telegram', data: settings.telegram },
-			{ label: 'Назад ↩️', data: 'back' },
+			{ label: 'Назад ↩️', data: 'admin' },
 		]),
 	})
 
 	const contactCtx = await conversation.waitFor('callback_query:data')
+
+	if (contactCtx.callbackQuery?.data !== settings.telegram) return
+
 	await contactCtx.answerCallbackQuery()
 
 	await contactCtx.editMessageText('Введите новое значение')
