@@ -8,6 +8,6 @@ export const adminCallback = async (ctx: MyContext) => {
 }
 
 export const changeContactCallback = async (ctx: MyContext) => {
-	await ctx.conversation.enter('changeContact')
 	await ctx.answerCallbackQuery()
+	await ctx.conversation.enter('changeContact')
 }

@@ -20,7 +20,7 @@ export const allProjectsCallback = async (ctx: MyContext) => {
 
 	const projectText = projects
 		.map((project) => {
-			return `<b>ID: ${project.id}</b>\n<b>${project.title}</b>  `
+			return `<b>ID: ${project.id}</b> - <b>${project.title}</b>  `
 		})
 		.join('\n\n')
 

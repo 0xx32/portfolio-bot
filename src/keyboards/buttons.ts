@@ -1,16 +1,25 @@
-import settings from '../../setting.json'
+import { prisma } from '@/utils/db/prisma'
 
-export const startMenuKeyboard = [
-	{
-		label: 'Связаться',
-		data: 'contact',
-		url: settings.telegram,
-	},
-	{
-		label: 'Портфолио',
-		data: 'portfolio',
-	},
-]
+export const mainMenuKeyboard = async () => {
+	const telegram = await prisma.contacts.findUnique({
+		where: {
+			slug: 'telegram',
+		},
+	})
+
+	return [
+		{
+			label: 'Связаться',
+			data: 'contact',
+			url: telegram?.value,
+		},
+		{
+			label: 'Портфолио',
+			data: 'portfolio',
+		},
+	]
+}
+
 export const adminMenuKeyboard = [
 	{
 		label: 'Проекты',

@@ -2,12 +2,26 @@
 	"name": "portfolio-bot",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
 	"type": "module",
 	"scripts": {
 		"dev": "tsx watch src/index.ts",
+		"build": "pkgroll",
 		"prepare": "husky",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"commit": "pnpm format *&& git add . && git commit"
+	},
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.cts",
+	"exports": {
+		"require": {
+			"types": "./dist/index.d.cts",
+			"default": "./dist/index.cjs"
+		},
+		"import": {
+			"types": "./dist/index.d.mts",
+			"default": "./dist/index.mjs"
+		}
 	},
 	"keywords": [],
 	"author": "access",
@@ -16,6 +30,7 @@
 		"@types/node": "^22.5.2",
 		"husky": "^9.1.5",
 		"lint-staged": "^15.2.10",
+		"pkgroll": "^2.4.2",
 		"prettier": "^3.3.3",
 		"prisma": "^5.19.1",
 		"ts-node": "^10.9.2",

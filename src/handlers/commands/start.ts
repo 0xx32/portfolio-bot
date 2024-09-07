@@ -1,6 +1,6 @@
 import { Context, InputFile } from 'grammy'
 
-import { startMessageHtml, createInlineKeyboard, startMenuKeyboard } from '@/utils'
+import { startMessageHtml, createInlineKeyboard, mainMenuKeyboard } from '@/utils'
 import { prisma } from '@/utils/db/prisma'
 
 export const startHandler = async (ctx: Context) => {
@@ -26,13 +26,15 @@ export const startHandler = async (ctx: Context) => {
 		},
 	})
 
+	const mainKeyboard = await mainMenuKeyboard()
+
 	if (!banner) {
 		const phote = new InputFile(bannerPath)
 
 		const message = await ctx.replyWithPhoto(phote, {
 			caption: startMessageHtml,
 			parse_mode: 'HTML',
-			reply_markup: createInlineKeyboard(startMenuKeyboard),
+			reply_markup: createInlineKeyboard(mainKeyboard),
 		})
 
 		await prisma.staticFiles.create({
@@ -48,6 +50,6 @@ export const startHandler = async (ctx: Context) => {
 	await ctx.replyWithPhoto(banner.fileId, {
 		caption: startMessageHtml,
 		parse_mode: 'HTML',
-		reply_markup: createInlineKeyboard(startMenuKeyboard),
+		reply_markup: createInlineKeyboard(mainKeyboard),
 	})
 }
