@@ -10,10 +10,11 @@ export const startHandler = async (ctx: Context) => {
 		},
 	})
 
-	if (!user && ctx.from?.id) {
+	if (!user && ctx.from?.id && ctx.chat?.id) {
 		await prisma.user.create({
 			data: {
 				accountId: ctx.from?.id,
+				chatId: ctx.chat?.id,
 			},
 		})
 	}

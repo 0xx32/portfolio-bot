@@ -1,5 +1,3 @@
-import { isAdmin } from '@/helpers'
-
 import type { MyContext } from '@/types/bot'
 import { adminMenuKeyboard, createInlineKeyboard } from '@/utils'
 

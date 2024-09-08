@@ -9,6 +9,10 @@ export const usersCallback = async (ctx: MyContext) => {
 		parse_mode: 'HTML',
 		reply_markup: createInlineKeyboard([
 			{
+				label: 'Сделать рассылку',
+				data: 'admin.mailing',
+			},
+			{
 				label: 'Назад ↩️',
 				data: 'admin',
 			},
@@ -16,5 +20,10 @@ export const usersCallback = async (ctx: MyContext) => {
 	})
 	await ctx.deleteMessage()
 
+	await ctx.answerCallbackQuery()
+}
+export const mailingForUsersCallback = async (ctx: MyContext) => {
+	await ctx.deleteMessage()
+	await ctx.conversation.enter('mailingForUsers')
 	await ctx.answerCallbackQuery()
 }
